@@ -4,7 +4,8 @@ shots-tmp
 *.local
 .DS_Store
 
-# CV contains personal phone numbers and referee contacts — keep out of the public repo
+# Source documents (CV, dissertation) — personal/academic PDFs, kept out of the public repo
 Samitha_Dissanayake_CV.pdf
+*.pdf
 
 .vercel
