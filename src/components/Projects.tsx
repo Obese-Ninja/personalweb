@@ -4,7 +4,7 @@ import { ArrowUpRightIcon } from "./Icons"
 
 export function Projects() {
   return (
-    <Section id="work" number="02" title="Selected work">
+    <Section id="work" number="03" title="Selected work">
       <ul className="divide-y divide-espresso/10 border-y border-espresso/10 dark:divide-bone/10 dark:border-bone/10">
         {projects.map((project, i) => (
           <li

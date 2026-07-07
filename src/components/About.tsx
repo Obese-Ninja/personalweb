@@ -1,4 +1,4 @@
-import { profile, skillGroups } from "../content"
+import { education, profile, skillGroups } from "../content"
 import { Section } from "./Section"
 
 export function About() {
@@ -39,6 +39,20 @@ export function About() {
               </ul>
             </div>
           ))}
+
+          <div className="reveal" style={{ "--reveal-delay": "270ms" } as React.CSSProperties}>
+            <h3 className="mb-3 font-mono text-[13px] tracking-widest text-stone uppercase dark:text-oat/70">
+              Education
+            </h3>
+            <ul className="space-y-3">
+              {education.map((item) => (
+                <li key={item.degree}>
+                  <p className="font-medium">{item.degree}</p>
+                  <p className="text-sm text-stone dark:text-oat/70">{item.school}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </Section>
