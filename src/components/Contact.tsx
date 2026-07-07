@@ -9,7 +9,7 @@ export function Contact() {
     <section id="contact" ref={ref} className="scroll-mt-20 bg-parchment dark:bg-umber">
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
         <div className="reveal mb-12 flex items-baseline gap-4">
-          <span className="font-mono text-sm text-clay dark:text-ember">04</span>
+          <span className="font-mono text-sm text-clay dark:text-ember">05</span>
           <h2 className="font-display text-3xl font-medium tracking-tight sm:text-4xl">Contact</h2>
         </div>
 
