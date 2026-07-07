@@ -1,6 +1,6 @@
 ---
 title: Hello, world — and how this blog works
-date: 2026-07-07
+date: 2026-07-06
 description: The first post, and a short guide to publishing here — write markdown, git push, done.
 tags: meta, writing
 ---

@@ -166,6 +166,22 @@
   .prose-earth pre {
     border-radius: 0.75rem;
   }
+
+  .prose-earth table {
+    font-size: 0.95em;
+  }
+
+  .prose-earth :is(th, td) {
+    padding: 0.6em 0.9em;
+  }
+
+  .prose-earth thead th {
+    color: var(--color-espresso);
+  }
+
+  .dark .prose-earth thead th {
+    color: var(--color-bone);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
