@@ -85,8 +85,14 @@
     transform: none;
   }
 
-  /* Earth-tone prose theme for blog posts */
-  .prose-earth {
+}
+
+/* Earth-tone prose theme for blog posts.
+   Deliberately UNLAYERED (not inside any @layer): the @tailwindcss/typography
+   plugin emits its `.prose` variables in the `utilities` cascade layer, which
+   would beat any @layer rule regardless of specificity. Unlayered styles win
+   over all layered styles, so these overrides always take effect. */
+.prose.prose-earth {
     --tw-prose-body: var(--color-bark);
     --tw-prose-headings: var(--color-espresso);
     --tw-prose-lead: var(--color-bark);
@@ -105,10 +111,10 @@
     --tw-prose-td-borders: var(--color-linen);
   }
 
-  .dark .prose-earth {
-    --tw-prose-body: var(--color-oat);
+  .dark .prose.prose-earth {
+    --tw-prose-body: var(--color-bone);
     --tw-prose-headings: var(--color-bone);
-    --tw-prose-lead: var(--color-oat);
+    --tw-prose-lead: var(--color-bone);
     --tw-prose-links: var(--color-ember);
     --tw-prose-bold: var(--color-bone);
     --tw-prose-counters: var(--color-ember);
@@ -182,7 +188,6 @@
   .dark .prose-earth thead th {
     color: var(--color-bone);
   }
-}
 
 @media (prefers-reduced-motion: reduce) {
   html {
