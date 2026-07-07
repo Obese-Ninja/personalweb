@@ -8,4 +8,7 @@ shots-tmp
 Samitha_Dissanayake_CV.pdf
 *.pdf
 
+# Raw robotics source photos — the optimised web copies live in public/robotics/
+/robotics/
+
 .vercel
