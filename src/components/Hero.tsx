@@ -33,7 +33,7 @@ export function Hero() {
           className="reveal mt-6 max-w-4xl font-display text-[clamp(2.6rem,8vw,5.5rem)] leading-[1.04] font-medium tracking-tight text-balance"
           style={{ "--reveal-delay": "90ms" } as React.CSSProperties}
         >
-          Cybersecurity engineer keeping{" "}
+          CyberSecurity engineer keeping{" "}
           <em className="font-light text-clay italic dark:text-ember">enterprise &amp; banking</em>
           {" "}environments safe — endpoint, network &amp; cloud.
         </h1>
