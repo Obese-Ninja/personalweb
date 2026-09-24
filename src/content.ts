@@ -112,7 +112,7 @@ export const projects: Project[] = [
     index: "04",
     name: "This website",
     description:
-      "The site you're reading — a hand-built portfolio in an earth-tone palette, designed to load fast and stay out of the way.",
+      "The site you're reading — a hand-built portfolio drawn in pen and paper, designed to load fast and stay out of the way.",
     stack: ["React", "TypeScript", "Vite", "Tailwind CSS"],
     href: "https://github.com/Obese-Ninja/personalweb",
     year: "2026",

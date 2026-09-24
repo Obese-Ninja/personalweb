@@ -1,50 +1,46 @@
 import { Link } from "react-router"
 import { posts } from "../lib/posts"
-import { Section } from "./Section"
-import { ArrowUpRightIcon } from "./Icons"
+import { PageIcon, Sheet, SheetHeader } from "./Paper"
+import { delay, Section } from "./Section"
 
 export function Writing() {
   const latest = posts.slice(0, 3)
 
   return (
-    <Section id="writing" number="04" title="Writing">
-      <ul className="divide-y divide-espresso/10 border-y border-espresso/10 dark:divide-bone/10 dark:border-bone/10">
-        {latest.map((post, i) => (
-          <li
-            key={post.slug}
-            className="reveal"
-            style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
-          >
-            <Link
-              to={`/blog/${post.slug}`}
-              className="group grid cursor-pointer gap-x-8 gap-y-2 py-7 sm:grid-cols-[1fr_auto] sm:items-baseline"
-            >
-              <div>
-                <h3 className="flex items-center gap-3 font-display text-xl font-medium tracking-tight transition-transform duration-300 group-hover:translate-x-2 sm:text-2xl">
-                  {post.title}
-                  <ArrowUpRightIcon className="size-4 shrink-0 text-clay opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:text-ember" />
-                </h3>
-                <p className="mt-1.5 max-w-xl leading-relaxed text-bark dark:text-oat">
-                  {post.description}
-                </p>
-              </div>
-              <span className="font-mono text-[13px] text-stone dark:text-oat/60">
-                {post.dateFormatted}
-              </span>
+    <Section id="writing">
+      <Sheet variant="lined" tiltDeg={-0.2} className="reveal px-6 pt-8 pb-8 sm:px-10">
+        <SheetHeader
+          title="recent notes"
+          aside={
+            <Link to="/blog" className="ink-link text-base">
+              all posts →
             </Link>
-          </li>
-        ))}
-      </ul>
+          }
+        />
 
-      <div className="reveal mt-8">
-        <Link
-          to="/blog"
-          className="group inline-flex cursor-pointer items-center gap-2 font-mono text-sm text-clay transition-colors hover:text-clay-deep dark:text-ember dark:hover:text-bone"
-        >
-          All posts
-          <ArrowUpRightIcon className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </Link>
-      </div>
+        <ul>
+          {latest.map((post, i) => (
+            <li key={post.slug} className="reveal pt-8" style={delay(i * 80)}>
+              <Link
+                to={`/blog/${post.slug}`}
+                className="group grid gap-x-6 sm:grid-cols-[minmax(0,1fr)_auto]"
+              >
+                <div className="min-w-0">
+                  <h3 className="flex items-center gap-2.5 text-[1.3rem] leading-8 font-bold transition-colors group-hover:text-blue-ink">
+                    <PageIcon className="size-5 shrink-0" />
+                    <span className="truncate">{post.title}</span>
+                  </h3>
+                  <p className="leading-8 text-pencil">{post.description}</p>
+                </div>
+                <div className="flex gap-4 text-sm leading-8 text-pencil sm:flex-col sm:items-end sm:gap-0">
+                  <span>{post.dateFormatted.toLowerCase()}</span>
+                  <span className="ink-link text-base">read</span>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Sheet>
     </Section>
   )
 }

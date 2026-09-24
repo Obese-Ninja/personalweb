@@ -1,6 +1,6 @@
 # samitha.dev — personal website
 
-Personal portfolio for **Samitha Sheshan Dissanayake**, built with React 19, TypeScript, Vite 7 and Tailwind CSS 4. Earth-tone design (sand / espresso / clay / olive) with full light + dark mode, scroll-reveal animations and `prefers-reduced-motion` support.
+Personal portfolio for **Samitha Sheshan Dissanayake**, built with React 19, TypeScript, Vite 7 and Tailwind CSS 4. Pen-and-paper design: napkins, ruled notebook pages and index cards on a desk, handwritten type (Kalam, Patrick Hand, Courier Prime) and a hand-drawn padlock mascot. Day ink and night ink themes, single-key shortcuts (A, E, W, N, C, B, T, H), scroll-reveal animations and `prefers-reduced-motion` support.
 
 ## Editing content
 

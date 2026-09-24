@@ -3,259 +3,557 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ---------------------------------------------------------------------------
+   Pen & paper design tokens.
+   Light = daylight desk with cream paper and ballpoint ink.
+   Dark  = night desk with a black notebook and gel pens.
+   Every colour is a variable, so `.dark` only redefines values below and
+   components never need `dark:` variants.
+--------------------------------------------------------------------------- */
 @theme {
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-hand: "Kalam", "Segoe Print", "Bradley Hand", cursive;
+  --font-display: "Patrick Hand", "Kalam", "Segoe Print", cursive;
+  --font-mono: "Courier Prime", "Courier New", ui-monospace, monospace;
+  --font-sans: var(--font-hand);
 
-  /* Earth palette — light surfaces */
-  --color-sand: #f3ede2;
-  --color-parchment: #faf6ee;
-  --color-linen: #e5dcca;
-  --color-espresso: #2b241c;
-  --color-bark: #55493a;
-  --color-stone: #7d7160;
-  --color-clay: #a4512f;
-  --color-clay-deep: #8a4226;
-  --color-olive: #67663c;
+  --color-desk: #e7e1d6;
+  --color-paper: #f7f4ee;
+  --color-cream: #f8f2e4;
+  --color-photo: #ffffff;
+  --color-ink: #2a2722;
+  --color-pencil: #57514a;
+  --color-faint: #8a8378;
+  --color-rule: #ddd5c7;
+  --color-margin: #de8a7c;
+  --color-accent: #dc6a40;
+  --color-accent-ink: #b0461f;
+  --color-wash: #f6d3bf;
+  --color-blue-ink: #2d4ea6;
+  --color-red-ink: #b3322a;
+  --color-green-ink: #2e7a3a;
+  --color-shade: rgb(70 50 30 / 0.2);
+  --color-tape: rgb(236 226 200 / 0.75);
+}
 
-  /* Earth palette — dark surfaces */
-  --color-soil: #171310;
-  --color-umber: #221c15;
-  --color-char: #322a20;
-  --color-bone: #ece3d3;
-  --color-oat: #b6a88f;
-  --color-ember: #d08355;
-  --color-moss: #a3a26b;
-
-  --animate-drift: drift 26s ease-in-out infinite alternate;
-
-  @keyframes drift {
-    from {
-      transform: translate3d(0, 0, 0) rotate(0deg);
-    }
-    to {
-      transform: translate3d(3rem, -2.5rem, 0) rotate(6deg);
-    }
-  }
+:root.dark {
+  --color-desk: #161412;
+  --color-paper: #23201c;
+  --color-cream: #26221e;
+  --color-photo: #35302a;
+  --color-ink: #ece5d7;
+  --color-pencil: #c3baaa;
+  --color-faint: #8f8679;
+  --color-rule: #37322b;
+  --color-margin: #8e4a40;
+  --color-accent: #e8865c;
+  --color-accent-ink: #f29c74;
+  --color-wash: #4b2d20;
+  --color-blue-ink: #9fb4f3;
+  --color-red-ink: #f2917f;
+  --color-green-ink: #93d197;
+  --color-shade: rgb(0 0 0 / 0.55);
+  --color-tape: rgb(120 110 90 / 0.45);
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    color-scheme: light;
+  }
+
+  :root.dark {
+    color-scheme: dark;
   }
 
   body {
-    @apply bg-sand text-espresso font-sans antialiased dark:bg-soil dark:text-bone;
+    @apply bg-desk font-hand text-ink antialiased;
+    font-size: 1.0625rem;
     text-rendering: optimizeLegibility;
   }
 
   ::selection {
-    @apply bg-clay text-parchment dark:bg-ember dark:text-soil;
+    @apply bg-wash text-ink;
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-4 outline-clay dark:outline-ember;
+    outline: 2px dashed var(--color-accent);
+    outline-offset: 4px;
+    border-radius: 4px;
   }
 }
 
 @layer components {
-  /* Film-grain wash over the whole page, sits above content but ignores input */
+  /* Paper fibre over the whole page. Sits above content but ignores input. */
   .grain::after {
     content: "";
     position: fixed;
     inset: 0;
     z-index: 100;
     pointer-events: none;
-    opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.07;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
+  .dark .grain::after {
+    opacity: 0.09;
+    mix-blend-mode: screen;
+  }
+
+  /* ---- Sheets of paper -------------------------------------------------
+     The paper itself is drawn on ::before so the #deckle SVG filter can
+     roughen its edges without distorting any of the text on top. */
+  .sheet {
+    position: relative;
+    isolation: isolate;
+    rotate: var(--tilt, 0deg);
+    transition:
+      rotate 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      translate 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .sheet::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--sheet-bg, var(--color-paper));
+    background-image: var(--sheet-pattern, none);
+    background-position: 0 var(--line-offset, 0);
+    box-shadow:
+      0 1px 1px var(--color-shade),
+      0 16px 30px -20px var(--color-shade);
+    filter: url(#deckle);
+  }
+
+  /* Napkin: embossed double border inset from the edge */
+  .sheet-napkin::after {
+    content: "";
+    position: absolute;
+    inset: 0.85rem;
+    z-index: -1;
+    pointer-events: none;
+    border: 1px solid color-mix(in srgb, var(--color-ink) 7%, transparent);
+    box-shadow:
+      inset 0 0 0 4px var(--color-paper),
+      inset 0 0 0 5px color-mix(in srgb, var(--color-ink) 5%, transparent);
+  }
+
+  /* Ruled notebook paper. Lines repeat every --line, so text set with
+     leading-8 (2rem) sits on the rules. */
+  .sheet-lined {
+    --line: 2rem;
+    --sheet-bg: var(--color-cream);
+  }
+
+  /* Rules live on their own unfiltered layer so they stay crisp */
+  .sheet-lined::after {
+    content: "";
+    position: absolute;
+    inset: 0 5px;
+    z-index: -1;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0 calc(var(--line) - 1px),
+      var(--color-rule) calc(var(--line) - 1px) var(--line)
+    );
+  }
+
+  /* Tear-off pad: a row of perforation holes along the top edge */
+  .sheet-perforated::before {
+    mask: radial-gradient(circle 3.5px at 50% 9px, transparent 97%, #000) 0 0 / 14px 100% repeat-x;
+  }
+
+  /* Red rule under a notebook page header */
+  .sheet-header {
+    border-bottom: 1.5px solid var(--color-margin);
+  }
+
+  /* ---- Sketchy outlines: buttons, keys, stamps -------------------------
+     Two wobbly strokes, slightly offset, like a line gone over twice. */
+  .sketch {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .sketch::before,
+  .sketch::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border: var(--sketch-w, 2px) solid var(--sketch-color, currentColor);
+    border-radius: 6px 13px 5px 14px / 13px 5px 12px 6px;
+    filter: url(#rough);
+    transition: translate 0.2s ease;
+  }
+
+  .sketch::before {
+    background: var(--sketch-fill, transparent);
+  }
+
+  .sketch::after {
+    translate: 2px 2.5px;
+    rotate: -0.5deg;
+    opacity: 0.5;
+    border-radius: 13px 5px 14px 6px / 5px 12px 6px 13px;
+  }
+
+  .sketch:hover::after {
+    translate: 3px 4px;
+  }
+
+  .sketch:active::before {
+    translate: 1px 1.5px;
+  }
+
+  .sketch-accent {
+    --sketch-color: var(--color-accent);
+    --sketch-fill: var(--color-wash);
+  }
+
+  .sketch-thin {
+    --sketch-w: 1.25px;
+  }
+
+  /* ---- Pen marks -------------------------------------------------------- */
+
+  /* Highlighter swipe behind a phrase */
+  .marker {
+    color: inherit;
+    background: linear-gradient(
+      100deg,
+      transparent 0.2em,
+      var(--color-wash) 0.3em calc(100% - 0.3em),
+      transparent calc(100% - 0.2em)
+    ) 0 62% / 100% 58% no-repeat;
+    padding-inline: 0.06em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* Pencil hatching, used for the active contents entry */
+  .hatch {
+    background-image: repeating-linear-gradient(
+      -55deg,
+      color-mix(in srgb, var(--color-accent) 30%, transparent) 0 1.5px,
+      transparent 1.5px 6px
+    );
+  }
+
+  /* Hand-drawn underline: a stroke gone over twice */
+  .scribble {
+    position: relative;
+    display: inline-block;
+  }
+
+  .scribble::after {
+    content: "";
+    position: absolute;
+    left: -3%;
+    right: -6%;
+    bottom: -0.3em;
+    height: 0.45em;
+    background: var(--scribble-color, currentColor);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M2 8C45 4 120 3 198 5M16 12C70 8 130 8 178 10' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  }
+
+  /* Blue ballpoint link with a hand-drawn underline */
+  .ink-link {
+    position: relative;
+    display: inline-block;
+    color: var(--color-blue-ink);
+    transition: color 0.2s;
+  }
+
+  .ink-link::after {
+    content: "";
+    position: absolute;
+    left: -2%;
+    right: -2%;
+    bottom: -0.2em;
+    height: 0.32em;
+    background: currentColor;
+    opacity: 0.8;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M1 5C30 2 70 3 99 4M4 7C40 5 75 6 96 6' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    transition:
+      opacity 0.2s,
+      translate 0.2s;
+  }
+
+  .ink-link:hover::after,
+  .group:hover .ink-link::after {
+    opacity: 1;
+    translate: 0 1px;
+  }
+
+  /* Wavy pen line used as a divider */
+  .squiggle {
+    height: 10px;
+    background: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 10'%3E%3Cpath d='M0 5Q6.5 0.5 13 5T26 5' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E") 0 50% / 26px 10px repeat-x;
+  }
+
+  /* Coffee ring left on the desk */
+  .coffee-ring {
+    border-radius: 50%;
+    border: 5px solid rgb(140 95 55 / 0.1);
+    box-shadow:
+      inset 0 0 0 2px rgb(140 95 55 / 0.07),
+      0 0 0 1px rgb(140 95 55 / 0.05);
+    filter: url(#rough);
+  }
+
+  .dark .coffee-ring {
+    border-color: rgb(200 160 120 / 0.07);
+  }
+
+  /* Translucent tape holding a card or photo down */
+  .tape::after {
+    content: "";
+    position: absolute;
+    top: -0.7rem;
+    left: 50%;
+    width: 5.5rem;
+    height: 1.4rem;
+    translate: -50% 0;
+    rotate: -3deg;
+    z-index: 2;
+    background: var(--color-tape);
+    box-shadow: 0 1px 2px var(--color-shade);
+    mask: linear-gradient(90deg, transparent, #000 3px calc(100% - 3px), transparent);
+  }
+
+  /* ---- Motion ----------------------------------------------------------- */
   .reveal {
     opacity: 0;
-    transform: translateY(1.5rem);
+    translate: 0 1.1rem;
     transition:
       opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-    transition-delay: var(--reveal-delay, 0ms);
+      translate 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      rotate 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms), var(--reveal-delay, 0ms), 0ms;
   }
 
   .reveal.is-visible {
     opacity: 1;
-    transform: none;
+    translate: none;
   }
 
-}
-
-/* Earth-tone prose theme for blog posts.
-   Deliberately UNLAYERED (not inside any @layer): the @tailwindcss/typography
-   plugin emits its `.prose` variables in the `utilities` cascade layer, which
-   would beat any @layer rule regardless of specificity. Unlayered styles win
-   over all layered styles, so these overrides always take effect. */
-.prose.prose-earth {
-    --tw-prose-body: var(--color-bark);
-    --tw-prose-headings: var(--color-espresso);
-    --tw-prose-lead: var(--color-bark);
-    --tw-prose-links: var(--color-clay);
-    --tw-prose-bold: var(--color-espresso);
-    --tw-prose-counters: var(--color-clay);
-    --tw-prose-bullets: var(--color-clay);
-    --tw-prose-hr: var(--color-linen);
-    --tw-prose-quotes: var(--color-bark);
-    --tw-prose-quote-borders: var(--color-clay);
-    --tw-prose-captions: var(--color-stone);
-    --tw-prose-code: var(--color-clay-deep);
-    --tw-prose-pre-code: var(--color-linen);
-    --tw-prose-pre-bg: var(--color-espresso);
-    --tw-prose-th-borders: var(--color-linen);
-    --tw-prose-td-borders: var(--color-linen);
+  .wiggle {
+    animation: wiggle 2.8s ease-in-out infinite;
+    transform-origin: 50% 90%;
   }
 
-  .dark .prose.prose-earth {
-    --tw-prose-body: var(--color-bone);
-    --tw-prose-headings: var(--color-bone);
-    --tw-prose-lead: var(--color-bone);
-    --tw-prose-links: var(--color-ember);
-    --tw-prose-bold: var(--color-bone);
-    --tw-prose-counters: var(--color-ember);
-    --tw-prose-bullets: var(--color-ember);
-    --tw-prose-hr: var(--color-char);
-    --tw-prose-quotes: var(--color-oat);
-    --tw-prose-quote-borders: var(--color-ember);
-    --tw-prose-captions: var(--color-oat);
-    --tw-prose-code: var(--color-ember);
-    --tw-prose-pre-code: var(--color-bone);
-    --tw-prose-pre-bg: var(--color-umber);
-    --tw-prose-th-borders: var(--color-char);
-    --tw-prose-td-borders: var(--color-char);
-  }
-
-  .prose-earth :is(h1, h2, h3, h4) {
-    font-family: var(--font-display);
-    font-weight: 500;
-    letter-spacing: -0.02em;
-  }
-
-  .prose-earth a {
-    text-underline-offset: 4px;
-    transition: color 0.2s;
-  }
-
-  .prose-earth a:hover {
-    color: var(--color-clay-deep);
-  }
-
-  .dark .prose-earth a:hover {
-    color: var(--color-bone);
-  }
-
-  .prose-earth :is(code, pre) {
-    font-family: var(--font-mono);
-  }
-
-  .prose-earth code::before,
-  .prose-earth code::after {
-    content: none;
-  }
-
-  .prose-earth :not(pre) > code {
-    background: var(--color-linen);
-    border-radius: 0.3rem;
-    padding: 0.15rem 0.4rem;
-    font-weight: 500;
-  }
-
-  .dark .prose-earth :not(pre) > code {
-    background: var(--color-char);
-  }
-
-  .prose-earth pre {
-    border-radius: 0.75rem;
-  }
-
-  .prose-earth table {
-    font-size: 0.95em;
-  }
-
-  .prose-earth :is(th, td) {
-    padding: 0.6em 0.9em;
-  }
-
-  .prose-earth thead th {
-    color: var(--color-espresso);
-  }
-
-  .dark .prose-earth thead th {
-    color: var(--color-bone);
-  }
-
-  /* Figures & photo layouts inside blog posts */
-  .prose.prose-earth figure {
-    margin: 2.75rem 0;
-  }
-
-  .prose.prose-earth figure img {
-    width: 100%;
-    border-radius: 0.9rem;
-    box-shadow: 0 18px 40px -24px rgb(43 36 28 / 0.55);
-  }
-
-  .prose.prose-earth figcaption {
-    margin-top: 0.75rem;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    letter-spacing: 0.02em;
-    color: var(--color-stone);
-  }
-
-  .dark .prose.prose-earth figcaption {
-    color: var(--color-oat);
-  }
-
-  /* Two-up photo grid; collapses to one column on small screens */
-  .prose.prose-earth .fig-grid {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: 1fr;
-  }
-
-  @media (min-width: 640px) {
-    .prose.prose-earth .fig-grid.two {
-      grid-template-columns: 1fr 1fr;
+  @keyframes wiggle {
+    0%,
+    70%,
+    100% {
+      rotate: 0deg;
+    }
+    76% {
+      rotate: -5deg;
+    }
+    84% {
+      rotate: 4deg;
+    }
+    92% {
+      rotate: -2deg;
     }
   }
+}
 
-  .prose.prose-earth .fig-grid img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 0.9rem;
-    box-shadow: 0 18px 40px -24px rgb(43 36 28 / 0.55);
-  }
+/* ---------------------------------------------------------------------------
+   Blog prose, written on paper.
+   Deliberately UNLAYERED: @tailwindcss/typography emits its `.prose`
+   variables in the `utilities` cascade layer, which would beat any @layer
+   rule regardless of specificity. Unlayered styles always win.
+   Colours are theme variables, so one block covers light and dark.
+--------------------------------------------------------------------------- */
+.prose.prose-paper {
+  --tw-prose-body: var(--color-ink);
+  --tw-prose-headings: var(--color-ink);
+  --tw-prose-lead: var(--color-pencil);
+  --tw-prose-links: var(--color-blue-ink);
+  --tw-prose-bold: var(--color-ink);
+  --tw-prose-counters: var(--color-accent-ink);
+  --tw-prose-bullets: var(--color-accent);
+  --tw-prose-hr: var(--color-rule);
+  --tw-prose-quotes: var(--color-pencil);
+  --tw-prose-quote-borders: var(--color-accent);
+  --tw-prose-captions: var(--color-pencil);
+  --tw-prose-code: var(--color-red-ink);
+  --tw-prose-pre-code: var(--color-ink);
+  --tw-prose-pre-bg: transparent;
+  --tw-prose-th-borders: color-mix(in srgb, var(--color-ink) 35%, transparent);
+  --tw-prose-td-borders: var(--color-rule);
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  line-height: 1.85;
+}
 
-  /* Newspaper clipping: pinned-to-the-wall treatment */
-  .prose.prose-earth .clipping {
-    max-width: 24rem;
-    margin: 2.75rem auto;
-    padding: 0.6rem;
-    background: var(--color-parchment);
-    border: 1px solid var(--color-linen);
-    border-radius: 0.35rem;
-    box-shadow: 0 22px 50px -22px rgb(43 36 28 / 0.6);
-    transform: rotate(-1.4deg);
-  }
+.prose-paper :is(h1, h2, h3, h4) {
+  font-family: var(--font-hand);
+  font-weight: 700;
+  letter-spacing: -0.005em;
+}
 
-  .dark .prose.prose-earth .clipping {
-    background: var(--color-char);
-    border-color: color-mix(in srgb, var(--color-bone) 12%, transparent);
-  }
+.prose-paper h2 {
+  font-size: 1.6em;
+}
 
-  .prose.prose-earth .clipping img {
-    width: 100%;
-    border-radius: 0.15rem;
-    box-shadow: none;
-    display: block;
+.prose-paper strong {
+  font-weight: 700;
+}
+
+.prose-paper a {
+  text-decoration-color: color-mix(in srgb, var(--color-blue-ink) 50%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+  transition: text-decoration-color 0.2s;
+}
+
+.prose-paper a:hover {
+  text-decoration-color: var(--color-blue-ink);
+  text-decoration-style: wavy;
+}
+
+.prose-paper :is(code, pre) {
+  font-family: var(--font-mono);
+}
+
+.prose-paper code::before,
+.prose-paper code::after {
+  content: none;
+}
+
+.prose-paper :not(pre) > code {
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.85em;
+  font-weight: 700;
+}
+
+.prose-paper pre {
+  border: 1.5px dashed color-mix(in srgb, var(--color-ink) 30%, transparent);
+  border-radius: 10px 4px 12px 5px / 5px 12px 4px 10px;
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  font-size: 0.85em;
+}
+
+.prose-paper blockquote {
+  font-style: normal;
+  font-weight: 400;
+}
+
+.prose-paper hr {
+  border: 0;
+  height: 10px;
+  background: var(--color-faint);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 10'%3E%3Cpath d='M0 5Q6.5 0.5 13 5T26 5' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E") 0 50% / 26px 10px repeat-x;
+}
+
+.prose-paper table {
+  font-size: 0.92em;
+  line-height: 1.6;
+}
+
+.prose-paper :is(th, td) {
+  padding: 0.55em 0.85em;
+}
+
+.prose-paper thead th {
+  font-weight: 700;
+}
+
+/* Photos: polaroid-style prints taped onto the page */
+.prose.prose-paper figure {
+  position: relative;
+  margin: 3rem 0;
+}
+
+.prose.prose-paper figure img,
+.prose.prose-paper .fig-grid img,
+.prose.prose-paper > p > img {
+  width: 100%;
+  padding: 0.55rem;
+  background: var(--color-photo);
+  border-radius: 2px;
+  box-shadow:
+    0 1px 2px var(--color-shade),
+    0 18px 34px -22px var(--color-shade);
+}
+
+.prose.prose-paper figure > img {
+  rotate: -0.6deg;
+}
+
+.prose.prose-paper figcaption {
+  margin-top: 0.9rem;
+  font-family: var(--font-hand);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-pencil);
+  text-align: center;
+}
+
+/* Two-up photo grid; collapses to one column on small screens */
+.prose.prose-paper .fig-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+  margin: 2.75rem 0;
+}
+
+@media (min-width: 640px) {
+  .prose.prose-paper .fig-grid.two {
+    grid-template-columns: 1fr 1fr;
   }
+}
+
+.prose.prose-paper .fig-grid img {
+  height: 100%;
+  margin: 0;
+  object-fit: cover;
+}
+
+.prose.prose-paper .fig-grid img:nth-child(odd) {
+  rotate: -1deg;
+}
+
+.prose.prose-paper .fig-grid img:nth-child(even) {
+  rotate: 1.2deg;
+}
+
+/* Newspaper clipping, taped to the page */
+.prose.prose-paper .clipping {
+  max-width: 24rem;
+  margin: 3rem auto;
+  rotate: -1.4deg;
+}
+
+.prose.prose-paper .clipping::before {
+  content: "";
+  position: absolute;
+  top: -0.7rem;
+  left: 50%;
+  width: 5.5rem;
+  height: 1.4rem;
+  translate: -50% 0;
+  rotate: 4deg;
+  z-index: 2;
+  background: var(--color-tape);
+  box-shadow: 0 1px 2px var(--color-shade);
+}
+
+.prose.prose-paper .clipping img {
+  display: block;
+  margin: 0;
+  rotate: none;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -263,10 +561,16 @@
   }
   .reveal {
     opacity: 1;
-    transform: none;
+    translate: none;
     transition: none;
   }
-  .animate-drift {
+  .wiggle {
     animation: none;
   }
+}
+
+/* Very tall sheets (blog posts) skip the edge filter: filtering a
+   several-thousand-pixel layer is expensive and gains nothing visible. */
+.sheet-smooth::before {
+  filter: none;
 }

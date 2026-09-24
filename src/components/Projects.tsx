@@ -1,47 +1,53 @@
 import { projects } from "../content"
-import { Section } from "./Section"
-import { ArrowUpRightIcon } from "./Icons"
+import { Critter, DeskHeading, sheetClass, tilt } from "./Paper"
+import { delay, Section } from "./Section"
+
+const tilts = [-1.2, 0.9, 0.7, -0.8]
+const flags = [undefined, "✓", undefined, "?"]
+
+function linkLabel(href: string) {
+  return href.includes("github.com") ? "view source ↗" : "visit site ↗"
+}
 
 export function Projects() {
   return (
-    <Section id="work" number="03" title="Selected work">
-      <ul className="divide-y divide-espresso/10 border-y border-espresso/10 dark:divide-bone/10 dark:border-bone/10">
+    <Section id="work" className="relative">
+      <div className="reveal">
+        <DeskHeading>on the table</DeskHeading>
+        <p className="mt-4 text-pencil">things i've built, left out on the desk.</p>
+      </div>
+
+      <ul className="mt-10 grid gap-10 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-12">
         {projects.map((project, i) => (
-          <li
-            key={project.name}
-            className="reveal"
-            style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
-          >
+          <li key={project.name} className="reveal" style={delay(i * 90)}>
             <a
               href={project.href}
               target="_blank"
               rel="noreferrer"
-              className="group grid cursor-pointer gap-x-8 gap-y-3 py-8 transition-colors sm:grid-cols-[3rem_1fr_auto] sm:items-baseline sm:py-10"
+              style={tilt(tilts[i % tilts.length])}
+              className={sheetClass(
+                "napkin",
+                "group flex h-full cursor-pointer flex-col px-7 pt-7 pb-8 hover:-translate-y-1 hover:[--tilt:0deg]",
+              )}
             >
-              <span className="font-mono text-sm text-stone transition-colors group-hover:text-clay dark:text-oat/60 dark:group-hover:text-ember">
-                {project.index}
-              </span>
-
-              <div>
-                <h3 className="flex items-center gap-3 font-display text-2xl font-medium tracking-tight transition-transform duration-300 group-hover:translate-x-2 sm:text-3xl">
-                  {project.name}
-                  <ArrowUpRightIcon className="size-5 text-clay opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:text-ember" />
-                </h3>
-                <p className="mt-2 max-w-xl leading-relaxed text-bark dark:text-oat">
-                  {project.description}
-                </p>
-                <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[13px] text-stone dark:text-oat/70">
-                  {project.stack.map((tech) => (
-                    <li key={tech}>{tech}</li>
-                  ))}
-                </ul>
+              <div className="flex items-start gap-3">
+                <Critter className="w-12 shrink-0" flag={flags[i % flags.length]} />
+                <div>
+                  <h3 className="text-2xl leading-tight font-bold">{project.name}</h3>
+                  <p className="text-sm text-pencil">{project.year}</p>
+                </div>
               </div>
-
-              <span className="font-mono text-sm text-stone dark:text-oat/60">{project.year}</span>
+              <p className="mt-4 leading-relaxed text-pencil">{project.description}</p>
+              <p className="mt-4 font-mono text-[13px] text-faint">{project.stack.join(" · ")}</p>
+              <span className="mt-auto pt-5">
+                <span className="ink-link">{linkLabel(project.href)}</span>
+              </span>
             </a>
           </li>
         ))}
       </ul>
+
+      <div aria-hidden="true" className="coffee-ring pointer-events-none absolute -right-10 -bottom-6 hidden size-44 md:block" />
     </Section>
   )
 }

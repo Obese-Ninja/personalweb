@@ -1,43 +1,49 @@
 import { experience } from "../content"
-import { Section } from "./Section"
+import { Critter, Sheet, SheetHeader } from "./Paper"
+import { delay, Section } from "./Section"
 
 export function Experience() {
   return (
-    <Section id="experience" number="02" title="Experience">
-      <ol className="relative space-y-12 border-l border-espresso/10 pl-8 sm:pl-10 dark:border-bone/10">
-        {experience.map((role, i) => (
-          <li
-            key={`${role.company}-${role.title}`}
-            className="reveal relative"
-            style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
-          >
-            <span
-              aria-hidden="true"
-              className="absolute top-2 -left-8 size-2.5 -translate-x-[calc(50%+0.5px)] rounded-full bg-clay sm:-left-10 dark:bg-ember"
-            />
-            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-              <h3 className="font-display text-xl font-medium tracking-tight sm:text-2xl">
-                {role.title}
-              </h3>
-              <span className="font-mono text-[13px] text-stone dark:text-oat/60">
-                {role.period}
-              </span>
-            </div>
-            <p className="mt-1 font-medium text-clay dark:text-ember">{role.company}</p>
-            {role.note && (
-              <p className="mt-0.5 font-mono text-[13px] text-stone dark:text-oat/60">{role.note}</p>
-            )}
-            <ul className="mt-3 max-w-2xl space-y-1.5 leading-relaxed text-bark dark:text-oat">
-              {role.points.map((point) => (
-                <li key={point} className="flex gap-3">
-                  <span aria-hidden="true" className="mt-2.5 h-px w-4 shrink-0 bg-clay/50 dark:bg-ember/50" />
-                  {point}
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ol>
+    <Section id="experience">
+      <Sheet variant="lined" tiltDeg={0.2} className="reveal px-6 pt-8 pb-8 sm:px-10">
+        <SheetHeader title="experience" aside="p. 2 · since 2020" />
+
+        <ol>
+          {experience.map((role, i) => {
+            const current = role.period.toLowerCase().includes("present")
+            return (
+              <li
+                key={`${role.company}-${role.title}`}
+                className="reveal grid gap-x-4 pt-8 sm:grid-cols-[2.5rem_minmax(0,1fr)_auto]"
+                style={delay(i * 80)}
+              >
+                <Critter className="mt-1 hidden w-10 sm:block" flag={i === 0 ? "!" : undefined} />
+
+                <div className="min-w-0">
+                  <h3 className="text-[1.35rem] leading-8 font-bold">{role.title}</h3>
+                  <p className="leading-8 text-accent-ink">
+                    {role.company}
+                    {role.note && <span className="text-sm text-pencil"> · {role.note}</span>}
+                  </p>
+                  <ul>
+                    {role.points.map((point) => (
+                      <li key={point} className="flex gap-2.5 leading-8 text-pencil">
+                        <span aria-hidden="true" className="text-faint">–</span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <p className="order-first text-sm leading-8 text-pencil sm:order-none sm:text-right">
+                  {role.period.toLowerCase()}
+                  {current && i === 0 && <span className="font-bold text-red-ink"> · now</span>}
+                </p>
+              </li>
+            )
+          })}
+        </ol>
+      </Sheet>
     </Section>
   )
 }

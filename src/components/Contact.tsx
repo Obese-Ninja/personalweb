@@ -1,58 +1,60 @@
 import { profile } from "../content"
 import { useReveal } from "../hooks"
-import { MailIcon, socialIcons } from "./Icons"
+import { buttonAccent, Critter, Sheet } from "./Paper"
 
 export function Contact() {
   const ref = useReveal<HTMLElement>()
 
   return (
-    <section id="contact" ref={ref} className="scroll-mt-20 bg-parchment dark:bg-umber">
-      <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
-        <div className="reveal mb-12 flex items-baseline gap-4">
-          <span className="font-mono text-sm text-clay dark:text-ember">05</span>
-          <h2 className="font-display text-3xl font-medium tracking-tight sm:text-4xl">Contact</h2>
-        </div>
-
-        <p className="reveal max-w-2xl font-display text-[clamp(1.8rem,5vw,3.2rem)] leading-tight font-light text-balance">
-          Have a project, a role, or just a good question?{" "}
-          <em className="text-clay italic dark:text-ember">Say hello.</em>
-        </p>
-
-        <div
-          className="reveal mt-10 flex flex-wrap items-center gap-4"
-          style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
-        >
-          <a
-            href={`mailto:${profile.email}`}
-            className="group inline-flex h-12 cursor-pointer items-center gap-2.5 rounded-full bg-clay px-6 font-medium text-parchment transition-colors hover:bg-clay-deep dark:bg-ember dark:text-soil dark:hover:bg-clay"
-          >
-            <MailIcon className="size-[18px]" />
-            {profile.email}
+    <section id="contact" ref={ref} className="scroll-mt-32 pt-10 pb-8 sm:pt-14 lg:scroll-mt-8">
+      <Sheet
+        variant="napkin"
+        tiltDeg={0.35}
+        className="reveal grid gap-10 px-7 py-10 sm:px-12 sm:py-12 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] md:gap-0"
+      >
+        <div className="md:pr-10">
+          <p className="text-lg text-pencil">dear reader,</p>
+          <p className="mt-4 font-display text-[clamp(1.9rem,4vw,2.8rem)] leading-tight text-balance">
+            Have a project, a role, or just a good question? <mark className="marker">Say hello.</mark>
+          </p>
+          <a href={`mailto:${profile.email}`} className={`${buttonAccent} mt-8`}>
+            write to me
           </a>
-
-          {profile.socials.map((social) => {
-            const Icon = socialIcons[social.label]
-            return (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={social.label}
-                className="flex size-12 items-center justify-center rounded-full border border-espresso/15 text-bark transition-all hover:-translate-y-0.5 hover:border-clay hover:text-clay dark:border-bone/15 dark:text-oat dark:hover:border-ember dark:hover:text-ember"
-              >
-                <Icon className="size-5" />
-              </a>
-            )
-          })}
+          <p className="mt-8 font-display text-2xl text-pencil">— {profile.firstName.toLowerCase()}</p>
         </div>
-      </div>
 
-      <footer className="border-t border-espresso/10 dark:border-bone/10">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-6 font-mono text-[13px] text-stone sm:px-8 dark:text-oat/60">
-          <p>© {new Date().getFullYear()} {profile.fullName}</p>
-          <p>Built with React, Vite &amp; Tailwind CSS</p>
+        <div className="relative md:border-l md:border-dashed md:border-rule md:pl-10">
+          <div className="sketch sketch-thin mr-2 ml-auto flex w-24 flex-col items-center gap-1 px-2 pt-3 pb-2 text-accent-ink rotate-3">
+            <Critter className="w-14" />
+            <span className="font-mono text-[10px] tracking-widest uppercase">{profile.location}</span>
+          </div>
+
+          <dl className="mt-6">
+            <div className="flex flex-col gap-x-3 border-b border-rule py-1.5 sm:flex-row sm:items-baseline">
+              <dt className="w-14 shrink-0 text-sm text-pencil">to:</dt>
+              <dd className="min-w-0 break-all">
+                <a href={`mailto:${profile.email}`} className="ink-link">
+                  {profile.email}
+                </a>
+              </dd>
+            </div>
+            {profile.socials.map((social) => (
+              <div key={social.label} className="flex flex-col gap-x-3 border-b border-rule py-1.5 sm:flex-row sm:items-baseline">
+                <dt className="w-14 shrink-0 text-sm text-pencil">{social.label.toLowerCase()}:</dt>
+                <dd className="min-w-0">
+                  <a href={social.href} target="_blank" rel="noreferrer" className="ink-link">
+                    {social.href.replace(/^https:\/\/(www\.)?/, "").replace(/\/$/, "")}
+                  </a>
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
+      </Sheet>
+
+      <footer className="mt-10 flex flex-wrap items-center justify-between gap-3 px-1 text-sm text-pencil">
+        <p>© {new Date().getFullYear()} {profile.fullName}</p>
+        <p>drawn with react, vite &amp; tailwind css</p>
       </footer>
     </section>
   )
