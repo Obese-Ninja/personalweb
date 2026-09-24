@@ -139,6 +139,7 @@ export const skillGroups = [
   {
     title: "Certifications",
     items: [
+      "CCSE · CrowdStrike Certified SIEM Engineer",
       "CCFA · CrowdStrike Falcon Administrator",
       "ZDTA · Zscaler Digital Transformation Admin",
       "ZTA · Zscaler Technical Associate",
