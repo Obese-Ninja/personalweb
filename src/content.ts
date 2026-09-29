@@ -14,6 +14,7 @@ export const profile = {
     "I build security infrastructure that holds up under pressure at Sanfer Technologies — deploying SIEM and ZTNA solutions, locking down hybrid Active Directory environments, and making compliance frameworks actually work, especially for organisations that can't afford to get breached.",
     "It started well before the job title, though. Robotics (a few competition wins), competitive chess, some creative writing prizes, and endless hours flashing custom ROMs onto Android phones I probably shouldn't have rooted. Basically a kid who liked puzzles and taking things apart to see how they worked. Not much has changed — the puzzles are just enterprise security problems now.",
     "Outside of work you'll find me elbow-deep in my Mk1 Pajero project, tinkering with my Proxmox homelab (self-hosted everything, naturally — local LLMs and AI agents included), chasing light with a camera, or playing classical guitar. Old 4x4s, servers and strings keep me sane when the workload piles up.",
+    "I also spent a lot of years gaming on PC — mostly competitive FPS (CS:GO, CoD4 ProMod, Valorant), with plenty of time lost to Red Dead Redemption 2, Cyberpunk 2077 and GTA V too. Some of the gameplay clips and screenshots are on my gaming Instagram.",
     "Security nerd who turns research into real-world defences.",
   ],
   email: "sheshansamitha@gmail.com",
@@ -21,6 +22,7 @@ export const profile = {
     { label: "GitHub", href: "https://github.com/Obese-Ninja" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/samithadissanayake/" },
     { label: "Instagram", href: "https://www.instagram.com/smth.png/" },
+    { label: "Gaming", href: "https://www.instagram.com/obese.ninja/" },
   ],
 } as const
 
