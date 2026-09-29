@@ -11,9 +11,10 @@ export const profile = {
   tagline:
     "Senior System Engineer at Sanfer Technologies — securing enterprise and banking environments with CrowdStrike, Zscaler, Cymulate and Orca Security.",
   about: [
-    "I'm a cybersecurity engineer with hands-on experience defending enterprise and banking environments against modern threats — across endpoint protection, network security and cloud security. I hold an MSc in Cyber Security (Merit) and a BSc (Hons) in Computer Networks.",
-    "Day to day I work across the full consulting arc: pre-sales and post-sales engineering, incident response on the CrowdStrike Falcon platform, health checks and configuration reviews, and hands-on platform training for partners and customers.",
-    "I started out administering security estates inside a bank — CrowdStrike, Trellix, Check Point, Forescout — and I still build software on the side: web tools, game projects and the occasional script that should have existed already.",
+    "I build security infrastructure that holds up under pressure at Sanfer Technologies — deploying SIEM and ZTNA solutions, locking down hybrid Active Directory environments, and making compliance frameworks actually work, especially for organisations that can't afford to get breached.",
+    "It started well before the job title, though. Robotics (a few competition wins), competitive chess, some creative writing prizes, and endless hours flashing custom ROMs onto Android phones I probably shouldn't have rooted. Basically a kid who liked puzzles and taking things apart to see how they worked. Not much has changed — the puzzles are just enterprise security problems now.",
+    "Outside of work you'll find me elbow-deep in my Mk1 Pajero project, tinkering with my Proxmox homelab (self-hosted everything, naturally — local LLMs and AI agents included), chasing light with a camera, or playing classical guitar. Old 4x4s, servers and strings keep me sane when the workload piles up.",
+    "Security nerd who turns research into real-world defences.",
   ],
   email: "sheshansamitha@gmail.com",
   socials: [
